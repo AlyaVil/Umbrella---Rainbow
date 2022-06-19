@@ -60,3 +60,81 @@ function drawTexture(tex, colorIndex) {
   }
   tex.pop();
 }
+function draw() {
+  let sec = millis() / 1000;
+  let radius = vmax * 0.1;
+  let sz = vmax * 0.8;
+  let y = vmin * -0.1;
+  
+  background(palette[0]);
+  translate(0, 140);
+  ambientLight(160, 160, 160);
+  directionalLight(255, 255, 255, -1, 1, -1);
+  rotateX(1);
+  orbitControl();
+  let N = 4;
+  for (let i = 0; i < N; i++) {
+    let z = (i - N / 2 + 0.5) * sz / N;
+    for (let j = 0; j < N; j++) {
+      let x = (j - N / 2 + 0.5) * sz / N;
+      let n = noise(x, z) * 2 - 1;
+      push();
+      {
+        translate(x, y, z);
+        rotateX(n * 0.2);
+        rotateY(sec * -0.1 + i + j);
+        
+        let index = (i * 4 + j) % textures.length;
+        unbrella(0, 0, 0, radius, index);
+      }
+      pop();
+    }
+  }
+  
+  // for debug
+  // push();
+  // {
+  //   translate(0, 0, 0);
+  //   image(textures[0], -cx, -cy);
+  // }
+  // pop();
+}
+
+function unbrella(x, y, z, radius, colorIndex) {
+  let theta = TAU;
+  let phi = PI * 0.45;
+  let thetaOffset = 0;
+  let phiOffset = -PI * 0.5;
+  let detailX = 8 * 3;
+  let detailY = 3 * 2;
+  let texColors = colors[colorIndex];
+  
+  push();
+  {
+    translate(x, y + radius * 0.2, z);
+    
+    push();
+    {
+      texture(textures[colorIndex]);
+      spherical(radius, theta, phi, thetaOffset, phiOffset, detailX, detailY);
+    }
+    pop();
+    
+    push();
+    {
+      fill(texColors[0]);
+      translate(0, -radius * 1.05, 0);
+      
+      cylinder(radius * 0.02, radius * 0.1, 8);
+    }
+    pop();
+    
+    push();
+    {
+      fill(texColors[3]);
+      translate(0, -radius * 0.8, 0);
+      
+      cylinder(radius * 0.02, radius * 0.38, 8);
+    }
+    pop();
+    142
