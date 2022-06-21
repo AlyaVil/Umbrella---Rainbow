@@ -135,4 +135,59 @@ function unbrella(x, y, z, radius, colorIndex) {
       cylinder(radius * 0.02, radius * 0.38, 8);
     }
     pop();
-    142
+     push();
+    {
+      fill(texColors[3]);
+      translate(0, -radius * 0.67, 0);
+      
+      cylinder(radius * 0.03, radius * 0.05, 8);
+    }
+    pop();
+    
+    push();
+    {
+      fill(palette[1]);
+      translate(0, -radius * 0.25, 0);
+      
+      cylinder(radius * 0.01, radius * 1.5, 8);
+    }
+    pop();
+    
+    push();
+    {
+      stroke(texColors[3]);
+      translate(0, -radius * 0.65, 0);
+      for (let i = 0; i < NUM; i++) {
+        rotateY(TAU / NUM);
+        line(0, 0, 0, radius * 0.41, -radius * 0.26, 0);
+      }
+    }
+    pop();
+    
+    push();
+    {
+      fill(texColors[0]);
+      translate(0, radius * 0.45, 0);
+      
+      cylinder(radius * 0.02, radius * 0.1, 8);
+    }
+    pop();
+    
+    push();
+    {
+      fill(texColors[0]);
+      translate(radius * 0.1, radius * 0.5, 0);
+      
+      let theta = PI;
+      let phi = TAU;
+      let thetaOffset = 0;
+      let phiOffset = PI;
+      let detailX = 12;
+      let detailY = 8;
+      torusical(radius * 0.1, radius * 0.02, theta, phi, thetaOffset, phiOffset, detailX, detailY);
+    }
+    pop();
+  }
+  pop();
+}
+196
