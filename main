@@ -190,4 +190,61 @@ function unbrella(x, y, z, radius, colorIndex) {
   }
   pop();
 }
-196
+function spherical(radius, theta, phi, thetaOffset, phiOffset, detailX, detailY) {
+  let gId = `spherical|${theta}|${phi}|${thetaOffset}|${phiOffset}|${detailX}|${detailY}`;
+  if (!this._renderer.geometryInHash(gId)) {
+    let cb = function(detailX, detailY) {
+      let u, v, p;
+      for (let i = 0; i <= this.detailY; i++) {
+        v = i / this.detailY;
+        for (let j = 0; j <= this.detailX; j++) {
+          u = j / this.detailX;
+          p = new p5.Vector(u - 0.5, v - 0.5, 0);
+          let t = u * theta + thetaOffset;
+          let f = v * phi + phiOffset;
+          if (i === this.detailY) {
+            f = (v * phi - abs(sin(u * TAU * NUM / 2) * 0.1)) + phiOffset;
+            f = constrain(f, -PI / 2, PI / 2);
+          }
+          let r = 1;
+          p.x = sin(t) * cos(f) * r;
+          p.y = sin(f) * r;
+          p.z = cos(t) * cos(f) * r;
+          this.vertices.push(p);
+          this.vertexNormals.push(p);
+          // this.uvs.push(u, v);
+          this.uvs.push((p.x / (r * 2))*(0.6 + cos(f) * 0.4) + 0.5, (p.z / (r * 2))*(0.6 + cos(f) * 0.4) + 0.5);
+        }
+      }
+    };
+    let geom = new p5.Geometry(detailX, detailY, cb);
+    geom.computeFaces().computeNormals();
+    this._renderer.createBuffers(gId, geom);
+  }
+  this._renderer.drawBuffersScaled(gId, radius, radius, radius);
+}
+
+function torusical(radius1, radius2, theta, phi, thetaOffset, phiOffset, detailX, detailY) {
+  let gId = `torusical|${theta}|${phi}|${thetaOffset}|${phiOffset}|${detailX}|${detailY}`;
+  if (!this._renderer.geometryInHash(gId)) {
+    let cb = function(detailX, detailY) {
+      let u, v, p;
+      for (let i = 0; i <= this.detailY; i++) {
+        v = i / this.detailY;
+        for (let j = 0; j <= this.detailX; j++) {
+          u = j / this.detailX;
+          p = new p5.Vector(u - 0.5, v - 0.5, 0);
+          let t = u * theta + thetaOffset;
+          let f = v * phi + phiOffset;
+          let r1 = 1;
+          let r2 = radius2 / radius1;
+          p.x = cos(t) * r1 + cos(f) * cos(t) * r2;
+          p.y = sin(t) * r1 + cos(f) * sin(t) * r2;
+          p.z = sin(f) * r2;
+          this.vertices.push(p);
+          this.vertexNormals.push(p);
+          this.uvs.push(u, v);
+        }
+      }
+    };
+    254
