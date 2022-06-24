@@ -248,3 +248,4 @@ function torusical(radius1, radius2, theta, phi, thetaOffset, phiOffset, detailX
       }
     };
     254
+
