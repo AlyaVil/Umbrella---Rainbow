@@ -247,5 +247,15 @@ function torusical(radius1, radius2, theta, phi, thetaOffset, phiOffset, detailX
         }
       }
     };
-    254
+     let geom = new p5.Geometry(detailX, detailY, cb);
+    geom.computeFaces().computeNormals();
+    this._renderer.createBuffers(gId, geom);
+  }
+  this._renderer.drawBuffersScaled(gId, radius1, radius1, radius1);
+}
+
+function keyPressed(){
+  save("img_" + month() + '-' + day() + '_' + hour() + '-' + minute() + '-' + second() + ".jpg");
+}
+
 
